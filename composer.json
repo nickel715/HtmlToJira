@@ -13,8 +13,9 @@
         "erusev/parsedown": "Works very well together"
     },
     "autoload": {
-        "psr-4": { 
-            "HtmlToJira\\": "src/"
+        "psr-4": {
+            "HtmlToJira\\": "src/",
+            "HtmlToJira\\Test\\": "test/HtmlToJira/"
         }
     }
 }
