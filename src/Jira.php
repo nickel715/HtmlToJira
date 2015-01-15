@@ -6,29 +6,29 @@ use \DOMNode;
 
 /**
  * Destination language for Jira syntax
- * 
+ *
  * @author Nicolas Hohm <nickel7152@gmail.com>
  */
-class Jira implements Language {
+class Jira implements Language
+{
 
-    public function nodeDefault(DOMNode $node) {
+    public function nodeDefault(DOMNode $node)
+    {
         return $node->nodeValue;
     }
 
     public function nodeP(DOMNode $node)
     {
         $content = '';
-        if ($node->hasChildNodes()) {
-            /** @var DOMNode $childNode */
-            foreach ($node->childNodes as $childNode) {
-                if ($childNode->nodeName == 'a') {
-                    $content .= $this->nodeA($childNode);
-                } else {
-                    $content = $node->nodeValue;
-                }
+        /** @var DOMNode $childNode */
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode->nodeName == 'a') {
+                $content .= $this->nodeA($childNode);
+            } else {
+                $content = $childNode->nodeValue;
             }
-            return trim($content);
         }
+        return trim($content);
     }
 
     private function heading($level, DOMNode $node)
@@ -48,6 +48,7 @@ class Jira implements Language {
         return $surrounding . $value . $surrounding;
     }
 
+    public function nodeB(DOMNode $node) { return $this->surround('*', $node->nodeValue); }
     public function nodeEm(DOMNode $node) { return $this->surround('_', $node->nodeValue); }
     public function nodeCite(DOMNode $node) { return $this->surround('??', $node->nodeValue); }
     public function nodeStrike(DOMNode $node) { return $this->surround('-', $node->nodeValue); }
@@ -56,7 +57,8 @@ class Jira implements Language {
     public function nodeSup(DOMNode $node) { return $this->surround('^', $node->nodeValue); }
     public function nodeSub(DOMNode $node) { return $this->surround('~', $node->nodeValue); }
 
-    private function tag($name, $content, $head = null) {
+    private function tag($name, $content, $head = null)
+    {
         if ($head === null) {
             $head = $name;
         }
@@ -83,26 +85,32 @@ class Jira implements Language {
                 $listItems[] = sprintf('%s %s', $bullet, $li->nodeValue);
             }
         }
-
-        return implode(PHP_EOL, $listItems) . PHP_EOL . PHP_EOL;
+        if (count($listItems) > 0) {
+            return implode(PHP_EOL, $listItems) . PHP_EOL . PHP_EOL;
+        } else {
+            return '';
+        }
     }
 
     public function nodeLi(DOMNode $node) { return ''; }
 
     public function nodePre(DOMNode $node)
     {
-        $head      = null;
-        $tagName   = 'noformat';
-        $codeClass = $node->childNodes->item(0)->attributes->getNamedItem('class')->nodeValue;
-        $codeClass = explode('-', $codeClass);
-        if ($codeClass[0] === 'language') {
-            $head = 'code:' . $codeClass[1];
-            $tagName = 'code';
+        $head     = null;
+        if ($node->hasChildNodes()) {
+            $codeNode = $node->childNodes->item(0);
+            if ($codeNode->hasAttribute('class')) {
+                $codeClass = $codeNode->attributes->getNamedItem('class')->nodeValue;
+                $codeClass = explode('-', $codeClass);
+                if ($codeClass[0] === 'language') {
+                    $head = 'code:' . $codeClass[1];
+                }
+            }
         }
-        return $this->tag($tagName, $node->nodeValue, $head);
+        return $this->tag('code', $node->nodeValue, $head);
     }
 
-    public function nodeCode(DOMNode $node) { return ''; }
+    public function nodeCode(DOMNode $node) { return sprintf('{{%s}}', $node->nodeValue); }
 
     public function node(DOMNode $node) { return $node->nodeValue; }
 }
