@@ -1,0 +1,20 @@
+{
+    "name": "nickel715/HtmlToJira",
+    "description": "library to convert html to jira syntax",
+    "homepage" : "https://github.com/nickel715/HtmlToJira",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Hohm"
+        }
+    ],
+    "suggest": {
+        "erusev/parsedown": "Works very well together"
+    },
+    "autoload": {
+        "psr-4": { 
+            "HtmlToJira\\": "src/"
+        }
+    }
+}
