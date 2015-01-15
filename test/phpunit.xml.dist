@@ -6,7 +6,10 @@
     convertWarningsToExceptions="true">
     <testsuites>
         <testsuite name="HtmlToJira">
-            <directory>../Test/</directory>
+            <directory>../test/</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <file>../test/IntegrationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

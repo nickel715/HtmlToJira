@@ -1,0 +1,29 @@
+<p><strong>Note:</strong> This document is itself written using Markdown; you
+can <a href="/projects/markdown/syntax.text">see the source for it by adding '.text' to the URL</a>.</p>
+<hr />
+<h2>Overview</h2>
+<p>Readability, however, is emphasized above all else. A Markdown-formatted
+document should be publishable as-is, as plain text, without looking
+like it's been marked up with tags or formatting instructions. While
+Markdown's syntax has been influenced by several existing text-to-HTML
+filters -- including <a href="http://docutils.sourceforge.net/mirror/setext.html">Setext</a>, <a href="http://www.aaronsw.com/2002/atx/">atx</a>, <a href="http://textism.com/tools/textile/">Textile</a>, <a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>,
+<a href="http://www.triptico.com/software/grutatxt.html">Grutatext</a>, and <a href="http://ettext.taint.org/doc/">EtText</a> -- the single biggest source of
+inspiration for Markdown's syntax is the format of plain text email.</p>
+<pre><code class="language-ruby">require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html</code></pre>
+<p><a href="http://example.com">http://example.com</a></p>
+<p><del>Mistaken text.</del></p>
+<p>hallo <code>foo</code> world</p>
+<p>I &lt;3 lists</p>
+<ul>
+<li>foo</li>
+<li>bar</li>
+<li>barz</li>
+</ul>
+<p>and now ordered list</p>
+<ol>
+<li>first</li>
+<li>second</li>
+<li>third</li>
+</ol>
