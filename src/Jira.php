@@ -53,6 +53,7 @@ class Jira implements Language
     public function nodeCite(DOMNode $node) { return $this->surround('??', $node->nodeValue); }
     public function nodeStrike(DOMNode $node) { return $this->surround('-', $node->nodeValue); }
     public function nodeS(DOMNode $node) { return $this->nodeStrike($node); }
+    public function nodeDel(DOMNode $node) { return $this->nodeStrike($node); }
     public function nodeU(DOMNode $node) { return $this->surround('+', $node->nodeValue); }
     public function nodeSup(DOMNode $node) { return $this->surround('^', $node->nodeValue); }
     public function nodeSub(DOMNode $node) { return $this->surround('~', $node->nodeValue); }
