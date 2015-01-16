@@ -12,6 +12,24 @@ use \DOMNode;
 class Jira implements Language
 {
 
+    public function handleNode(DOMNode $node) {
+        $row = '';
+        if ($node->nodeType === XML_ELEMENT_NODE) {
+
+            $method = 'node' . ucfirst(strtolower($node->nodeName));
+
+            if (method_exists($this, $method)) {
+                $row = $this->$method($node);
+            } else {
+                $row = $this->nodeDefault($node);
+            }
+
+        } elseif ($node->nodeType === XML_TEXT_NODE && $node->nodeValue != PHP_EOL) {
+            $row = str_replace(PHP_EOL, ' ', $node->nodeValue);
+        }
+        return $row;
+    }
+
     public function nodeDefault(DOMNode $node)
     {
         return $node->nodeValue;
