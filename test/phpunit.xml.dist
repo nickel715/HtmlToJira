@@ -5,8 +5,8 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true">
     <testsuites>
-        <testsuite name="HtmlToJira">
-            <directory>../test/</directory>
+        <testsuite name="Unit">
+            <directory>../test/HtmlToJira</directory>
         </testsuite>
         <testsuite name="Integration">
             <file>../test/IntegrationTest.php</file>
