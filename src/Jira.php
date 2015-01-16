@@ -40,13 +40,9 @@ class Jira implements Language
         $content = '';
         /** @var DOMNode $childNode */
         foreach ($node->childNodes as $childNode) {
-            if ($childNode->nodeName == 'a') {
-                $content .= $this->nodeA($childNode);
-            } else {
-                $content = $childNode->nodeValue;
-            }
+            $content .= $this->handleNode($childNode);
         }
-        return trim($content);
+        return trim($content) . PHP_EOL;
     }
 
     private function heading($level, DOMNode $node)
