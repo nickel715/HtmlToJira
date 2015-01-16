@@ -49,6 +49,7 @@ class Jira implements Language
     }
 
     public function nodeB(DOMNode $node) { return $this->surround('*', $node->nodeValue); }
+    public function nodeStrong(DOMNode $node) { return $this->surround('*', $node->nodeValue); }
     public function nodeEm(DOMNode $node) { return $this->surround('_', $node->nodeValue); }
     public function nodeCite(DOMNode $node) { return $this->surround('??', $node->nodeValue); }
     public function nodeStrike(DOMNode $node) { return $this->surround('-', $node->nodeValue); }
@@ -63,15 +64,15 @@ class Jira implements Language
         if ($head === null) {
             $head = $name;
         }
-        return sprintf('{%s}%s%s%s{%s}', $head, PHP_EOL, $content, PHP_EOL, $name);
+        return sprintf('{%s}%s%s%s{%s}%s', $head, PHP_EOL, $content, PHP_EOL, $name, PHP_EOL);
     }
 
     public function nodeBlockquote(DOMNode $node) { return $this->tag('quote', $node->nodeValue); }
-    public function nodeHr(DOMNode $node) { return '----'; }
+    public function nodeHr(DOMNode $node) { return '----' . PHP_EOL; }
 
     public function nodeA(DOMNode $node) { return sprintf('[%s|%s]', $node->nodeValue, $node->attributes->getNamedItem('href')->nodeValue); }
 
-    public function nodeUl(DOMNode $node)
+    private function listNode(DOMNode $node)
     {
         $listItems = [];
         $bullet = '*';
@@ -92,7 +93,8 @@ class Jira implements Language
             return '';
         }
     }
-
+    public function nodeUl(DOMNode $node) { return $this->listNode($node); }
+    public function nodeOl(DOMNode $node) { return $this->listNode($node); }
     public function nodeLi(DOMNode $node) { return ''; }
 
     public function nodePre(DOMNode $node)

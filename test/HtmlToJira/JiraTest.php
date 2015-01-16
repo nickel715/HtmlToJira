@@ -29,7 +29,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
     public function testNodePWithTextOnly()
     {
         $node = new DOMElement('p', $this->nodeValue);
-        $this->assertEquals($this->nodeValue, $this->sut->nodeP($node));
+        $this->assertEquals($this->nodeValue . PHP_EOL, $this->sut->nodeP($node));
     }
 
     public function testNodePWithLink()
@@ -39,7 +39,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $nodeA->setAttribute('href', 'http://example.com');
         $nodeP->appendChild($nodeA);
 
-        $expected = '[example.com|http://example.com]';
+        $expected = '[example.com|http://example.com]' . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
@@ -54,7 +54,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $expectedHtml .= '<a href="http://example.com">example.com</a></p>';
         $this->assertEquals($expectedHtml, $this->dom->saveHtml($nodeP));
 
-        $expected = $this->nodeValue.'[example.com|http://example.com]';
+        $expected = $this->nodeValue.'[example.com|http://example.com]' . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
@@ -68,7 +68,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $nodeP->appendChild($nodeA);
         $nodeP->appendChild($nodeA2);
 
-        $expected = '[example.com|http://example.com][example2.com|http://example2.com]';
+        $expected = '[example.com|http://example.com][example2.com|http://example2.com]' . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
@@ -119,7 +119,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
     public function testNodeHr()
     {
         $node = new DOMElement('hr');
-        $this->assertEquals('----', $this->sut->nodeHr($node));
+        $this->assertEquals('----' . PHP_EOL, $this->sut->nodeHr($node));
     }
 
     public function testNodeA()
@@ -185,14 +185,14 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $expectedHtml = '<pre><code>' . $code . '</code></pre>';
         $this->assertEquals($expectedHtml, $this->dom->saveHtml($nodePre));
 
-        $expected = '{code}' . PHP_EOL . $code . PHP_EOL . '{code}';
+        $expected = '{code}' . PHP_EOL . $code . PHP_EOL . '{code}' . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodePre($nodePre));
     }
 
     public function testNodePreWithoutContent()
     {
         $node = new DOMElement('pre');
-        $this->assertEquals('{code}' . PHP_EOL . PHP_EOL . '{code}', $this->sut->nodePre($node));
+        $this->assertEquals('{code}' . PHP_EOL . PHP_EOL . '{code}' . PHP_EOL, $this->sut->nodePre($node));
     }
 
     public function testNodePreWithLanguage()
@@ -206,7 +206,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $expectedHtml = '<pre><code class="language-php">' . $code . '</code></pre>';
         $this->assertEquals($expectedHtml, $this->dom->saveHtml($nodePre));
 
-        $expected = '{code:php}' . PHP_EOL . $code . PHP_EOL . '{code}';
+        $expected = '{code:php}' . PHP_EOL . $code . PHP_EOL . '{code}' . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodePre($nodePre));
     }
 
