@@ -1,6 +1,6 @@
 <?php
 
-namespace HtmlToJira;
+namespace HtmlConverter;
 
 use \DOMDocument;
 use \DOMNode;
@@ -10,7 +10,7 @@ use \DOMNode;
  *
  * @author Nicolas Hohm <nickel7152@gmail.com>
  */
-class HtmlConverter
+class Converter
 {
     private $result = '';
     private $language;

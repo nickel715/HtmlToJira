@@ -1,8 +1,8 @@
 <?php
 
-namespace HtmlToJira\Test;
+namespace HtmlConverter\Test;
 
-use HtmlToJira\Jira;
+use HtmlConverter\Jira;
 use \DOMDocument;
 use \DOMNode;
 use \DOMText;

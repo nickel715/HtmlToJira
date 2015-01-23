@@ -1,7 +1,7 @@
 {
-    "name": "nickel715/HtmlToJira",
-    "description": "library to convert html to jira syntax",
-    "homepage" : "https://github.com/nickel715/HtmlToJira",
+    "name": "nickel715/html-converter",
+    "description": "library to convert html to any compatible language like atlassian jira syntax",
+    "homepage" : "https://github.com/nickel715/html-converter",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "HtmlToJira\\": "src/"
+            "HtmlConverter\\": "src/"
         }
     }
 }

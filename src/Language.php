@@ -1,6 +1,6 @@
 <?php
 
-namespace HtmlToJira;
+namespace HtmlConverter;
 
 use \DOMNode;
 
