@@ -29,7 +29,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
     public function testNodePWithTextOnly()
     {
         $node = new DOMElement('p', $this->nodeValue);
-        $this->assertEquals($this->nodeValue . PHP_EOL, $this->sut->nodeP($node));
+        $this->assertEquals($this->nodeValue . PHP_EOL . PHP_EOL, $this->sut->nodeP($node));
     }
 
     public function testNodePWithLink()
@@ -39,7 +39,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $nodeA->setAttribute('href', 'http://example.com');
         $nodeP->appendChild($nodeA);
 
-        $expected = '[example.com|http://example.com]' . PHP_EOL;
+        $expected = '[example.com|http://example.com]' . PHP_EOL . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
@@ -54,7 +54,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $expectedHtml .= '<a href="http://example.com">example.com</a></p>';
         $this->assertEquals($expectedHtml, $this->dom->saveHtml($nodeP));
 
-        $expected = $this->nodeValue.'[example.com|http://example.com]' . PHP_EOL;
+        $expected = $this->nodeValue.'[example.com|http://example.com]' . PHP_EOL . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
@@ -68,7 +68,7 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $nodeP->appendChild($nodeA);
         $nodeP->appendChild($nodeA2);
 
-        $expected = '[example.com|http://example.com][example2.com|http://example2.com]' . PHP_EOL;
+        $expected = '[example.com|http://example.com][example2.com|http://example2.com]' . PHP_EOL . PHP_EOL;
         $this->assertEquals($expected, $this->sut->nodeP($nodeP));
     }
 
