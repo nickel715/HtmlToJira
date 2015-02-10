@@ -42,7 +42,7 @@ class Jira implements Language
         foreach ($node->childNodes as $childNode) {
             $content .= $this->handleNode($childNode);
         }
-        return trim($content) . PHP_EOL;
+        return trim($content) . PHP_EOL . PHP_EOL;
     }
 
     private function heading($level, DOMNode $node)
