@@ -98,7 +98,7 @@ class Jira implements Language
         /** @var DOMNode $li */
         foreach ($node->childNodes as $li) {
             if ($li->nodeType != XML_TEXT_NODE) { // ignore text between list items
-                $listItems[] = sprintf('%s %s', $bullet, $li->nodeValue);
+                $listItems[] = sprintf('%s %s', $bullet, $this->listItemNode($li));
             }
         }
         if (count($listItems) > 0) {
@@ -107,13 +107,22 @@ class Jira implements Language
             return '';
         }
     }
+
+    private function listItemNode(DOMNode $li) {
+        $content = '';
+        foreach ($li->childNodes as $liChild) {
+            $content .= $this->handleNode($liChild);
+        }
+        return $content;
+    }
+
     public function nodeUl(DOMNode $node) { return $this->listNode($node); }
     public function nodeOl(DOMNode $node) { return $this->listNode($node); }
     public function nodeLi(DOMNode $node) { return ''; }
 
     public function nodePre(DOMNode $node)
     {
-        $head     = null;
+        $head = null;
         if ($node->hasChildNodes()) {
             $codeNode = $node->childNodes->item(0);
             if ($codeNode->hasAttribute('class')) {
