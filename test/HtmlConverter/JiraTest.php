@@ -22,8 +22,9 @@ class JiraTest extends \PHPUnit_Framework_TestCase
 
     public function testNodeDefault()
     {
-        $node = new DOMText($this->nodeValue);
-        $this->assertEquals($this->nodeValue, $this->sut->nodeDefault($node));
+        $node = new DOMElement('foo', $this->nodeValue);
+        $actual = $this->sut->handleNode($node);
+        $this->assertEquals($this->nodeValue, $actual);
     }
 
     public function testNodePWithTextOnly()
