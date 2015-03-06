@@ -11,7 +11,6 @@ use \DOMNode;
  */
 class Jira implements Language
 {
-
     public function handleNode(DOMNode $node)
     {
         $row = '';
@@ -36,13 +35,18 @@ class Jira implements Language
         return $node->nodeValue;
     }
 
-    public function nodeP(DOMNode $node)
+    private function handleChilds(DOMNode $node)
     {
         $content = '';
-        /** @var DOMNode $childNode */
-        foreach ($node->childNodes as $childNode) {
-            $content .= $this->handleNode($childNode);
+        foreach ($node->childNodes as $child) {
+            $content .= $this->handleNode($child);
         }
+        return $content;
+    }
+
+    public function nodeP(DOMNode $node)
+    {
+        $content = $this->handleChilds($node);
         return trim($content) . PHP_EOL . PHP_EOL;
     }
 
@@ -80,7 +84,6 @@ class Jira implements Language
     {
         return $this->heading(6, $node);
     }
-
 
     private function surround($surrounding, $value)
     {
@@ -161,50 +164,57 @@ class Jira implements Language
         return sprintf('[%s|%s]', $node->nodeValue, $node->attributes->getNamedItem('href')->nodeValue);
     }
 
-    private function listNode(DOMNode $node)
+    private function caluclateNestingLevel(DOMNode $node)
+    {
+        $nestingLevel = 1;
+        while ($node = $node->parentNode) {
+            if ($node->nodeName == 'li') {
+                $nestingLevel++;
+            }
+        }
+        return $nestingLevel;
+    }
+
+    private function listNode(DOMNode $node, $bullet, $nestingLevel)
     {
         $listItems = [];
-        $bullet = '*';
 
-        if ($node->nodeName == 'ol') {
-            $bullet = '#';
-        }
+        $bullet = str_repeat($bullet, $nestingLevel);
 
         /** @var DOMNode $li */
         foreach ($node->childNodes as $li) {
             if ($li->nodeType != XML_TEXT_NODE) { // ignore text between list items
-                $listItems[] = sprintf('%s %s', $bullet, $this->listItemNode($li));
+                $listItems[] = sprintf('%s %s', $bullet, $this->handleNode($li));
             }
         }
+        $html = '';
         if (count($listItems) > 0) {
-            return implode(PHP_EOL, $listItems) . PHP_EOL . PHP_EOL;
-        } else {
-            return '';
+            if ($nestingLevel > 1) {
+                $html .= PHP_EOL;
+            }
+            $html .= implode(PHP_EOL, $listItems);
+            if ($nestingLevel == 1) {
+                $html .= PHP_EOL . PHP_EOL;
+            }
         }
-    }
-
-    private function listItemNode(DOMNode $li)
-    {
-        $content = '';
-        foreach ($li->childNodes as $liChild) {
-            $content .= $this->handleNode($liChild);
-        }
-        return $content;
+        return $html;
     }
 
     public function nodeUl(DOMNode $node)
     {
-        return $this->listNode($node);
+        $nestingLevel = $this->caluclateNestingLevel($node);
+        return $this->listNode($node, '*', $nestingLevel);
     }
 
     public function nodeOl(DOMNode $node)
     {
-        return $this->listNode($node);
+        $nestingLevel = $this->caluclateNestingLevel($node);
+        return $this->listNode($node, '#', $nestingLevel);
     }
 
-    public function nodeLi(DOMNode $node)
+    public function nodeLi(DOMNode $li)
     {
-        return '';
+        return $this->handleChilds($li);
     }
 
     public function nodePre(DOMNode $node)

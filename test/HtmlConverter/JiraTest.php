@@ -116,6 +116,13 @@ class JiraTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->sut->nodeB($node));
     }
 
+    public function testNodeStrong()
+    {
+        $node = new DOMElement('b', $this->nodeValue);
+        $expected = '*' . $this->nodeValue . '*';
+        $this->assertEquals($expected, $this->sut->nodeStrong($node));
+    }
+
     public function testNodeHr()
     {
         $node = new DOMElement('hr');
@@ -214,5 +221,62 @@ class JiraTest extends \PHPUnit_Framework_TestCase
     {
         $node = new DOMElement('code', $this->nodeValue);
         $this->assertEquals('{{'. $this->nodeValue .'}}', $this->sut->nodeCode($node));
+    }
+
+    public function testNodeOlWithLi()
+    {
+        $nodeOl = $this->dom->createElement('ol');
+        $nodeLi = $this->dom->createElement('li', $this->nodeValue);
+        $nodeOl->appendChild($nodeLi);
+        $expected = '# ' . $this->nodeValue . PHP_EOL . PHP_EOL;
+        $this->assertEquals($expected, $this->sut->nodeOl($nodeOl));
+    }
+
+    public function testNestedList()
+    {
+        $nodeUlLevel1 = $this->dom->createElement('ul');
+        $nodeLiLevel1 = $this->dom->createElement('li', $this->nodeValue);
+        $nodeUlLevel2 = $this->dom->createElement('ul');
+        $nodeLiLevel2 = $this->dom->createElement('li', $this->nodeValue);
+
+        $nodeUlLevel1->appendChild($nodeLiLevel1);
+        $nodeUlLevel2->appendChild($nodeLiLevel2);
+        $nodeLiLevel1->appendChild($nodeUlLevel2);
+
+        $expectedHtml = '<ul><li>' . $this->nodeValue . '<ul><li>' . $this->nodeValue . '</li></ul></li></ul>';
+        $actual = str_replace(array("\n", "\r"), '', $this->dom->saveHtml($nodeUlLevel1));
+
+        $this->assertEquals($expectedHtml, $actual);
+
+        $expected = '* ' . $this->nodeValue . PHP_EOL . '** ' . $this->nodeValue . PHP_EOL . PHP_EOL;
+        $this->assertEquals($expected, $this->sut->nodeUl($nodeUlLevel1));
+    }
+
+    public function testDeppNestedList()
+    {
+        $nodeUlLevel1 = $this->dom->createElement('ul');
+        $nodeLiLevel1 = $this->dom->createElement('li', $this->nodeValue);
+        $nodeUlLevel2 = $this->dom->createElement('ul');
+        $nodeLiLevel2 = $this->dom->createElement('li', $this->nodeValue);
+        $nodeUlLevel3 = $this->dom->createElement('ul');
+        $nodeLiLevel3 = $this->dom->createElement('li', $this->nodeValue);
+
+        $nodeUlLevel1->appendChild($nodeLiLevel1);
+        $nodeLiLevel1->appendChild($nodeUlLevel2);
+        $nodeUlLevel2->appendChild($nodeLiLevel2);
+        $nodeLiLevel2->appendChild($nodeUlLevel3);
+        $nodeUlLevel3->appendChild($nodeLiLevel3);
+
+        $expected = sprintf(
+            '* %s%s** %s%s*** %s%s%s',
+            $this->nodeValue,
+            PHP_EOL,
+            $this->nodeValue,
+            PHP_EOL,
+            $this->nodeValue,
+            PHP_EOL,
+            PHP_EOL
+        );
+        $this->assertEquals($expected, $this->sut->nodeUl($nodeUlLevel1));
     }
 }
