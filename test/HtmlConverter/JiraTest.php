@@ -13,11 +13,13 @@ class JiraTest extends \PHPUnit_Framework_TestCase
     private $sut;
     private $dom;
     private $nodeValue = 'hallo welt';
+    private $node;
 
     public function setUp()
     {
         $this->sut = new Jira;
         $this->dom = new DOMDocument;
+        $this->node = new DOMText($this->nodeValue);
     }
 
     public function testNodeDefault()
@@ -112,16 +114,14 @@ class JiraTest extends \PHPUnit_Framework_TestCase
 
     public function testNodeB()
     {
-        $node = new DOMElement('b', $this->nodeValue);
         $expected = '*' . $this->nodeValue . '*';
-        $this->assertEquals($expected, $this->sut->nodeB($node));
+        $this->assertEquals($expected, $this->sut->nodeB($this->node));
     }
 
     public function testNodeStrong()
     {
-        $node = new DOMElement('b', $this->nodeValue);
         $expected = '*' . $this->nodeValue . '*';
-        $this->assertEquals($expected, $this->sut->nodeStrong($node));
+        $this->assertEquals($expected, $this->sut->nodeStrong($this->node));
     }
 
     public function testNodeHr()
@@ -279,5 +279,59 @@ class JiraTest extends \PHPUnit_Framework_TestCase
             PHP_EOL
         );
         $this->assertEquals($expected, $this->sut->nodeUl($nodeUlLevel1));
+    }
+
+    public function testNodeEm()
+    {
+        $expected = '_' . $this->nodeValue . '_';
+        $this->assertEquals($expected, $this->sut->nodeEm($this->node));
+    }
+
+    public function testNodeCite()
+    {
+        $expected = '??' . $this->nodeValue . '??';
+        $this->assertEquals($expected, $this->sut->nodeCite($this->node));
+    }
+
+    public function testNodeStrike()
+    {
+        $expected = '-' . $this->nodeValue . '-';
+        $this->assertEquals($expected, $this->sut->nodeStrike($this->node));
+    }
+
+    public function testNodeS()
+    {
+        $expected = '-' . $this->nodeValue . '-';
+        $this->assertEquals($expected, $this->sut->nodeS($this->node));
+    }
+
+    public function testNodeDel()
+    {
+        $expected = '-' . $this->nodeValue . '-';
+        $this->assertEquals($expected, $this->sut->nodeDel($this->node));
+    }
+
+    public function testNodeU()
+    {
+        $expected = '+' . $this->nodeValue . '+';
+        $this->assertEquals($expected, $this->sut->nodeU($this->node));
+    }
+
+    public function testNodeSup()
+    {
+        $expected = '^' . $this->nodeValue . '^';
+        $this->assertEquals($expected, $this->sut->nodeSup($this->node));
+    }
+
+    public function testNodeSub()
+    {
+        $expected = '~' . $this->nodeValue . '~';
+        $this->assertEquals($expected, $this->sut->nodeSub($this->node));
+    }
+
+    public function testNodeBlockquote()
+    {
+        $expected = '{quote}' . PHP_EOL . $this->nodeValue . PHP_EOL . '{quote}' . PHP_EOL;
+        $this->assertEquals($expected, $this->sut->nodeBlockquote($this->node));
     }
 }
