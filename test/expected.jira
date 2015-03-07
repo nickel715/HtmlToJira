@@ -27,3 +27,12 @@ and now ordered list
 # second
 # third
 
+and whats about nested lists ;)
+
+* first level
+** second level
+** second level again
+*** oh and now third level
+* first level again
+** second level
+
